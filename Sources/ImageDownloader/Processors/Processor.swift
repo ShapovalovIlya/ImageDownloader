@@ -48,7 +48,7 @@ private extension Processor {
             let context = try makeContext(
                 from: cgImage,
                 in: rect.size,
-                bitsPerComponent: 8,
+                bitsPerComponent: cgImage.bitsPerComponent,
                 bytesPerRow: 4 * rect.width.int
             )
             let path = makePath(in: rect, with: corner)

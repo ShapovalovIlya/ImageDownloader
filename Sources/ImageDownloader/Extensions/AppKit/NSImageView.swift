@@ -12,7 +12,7 @@ import CoreGraphics
 public extension NSImageView {
     typealias Completion = Subscribers.Completion<Error>
     
-    func image(
+    func imageCancellable(
         for url: URL,
         options: [Processor] = .init(),
         cache: CGImageCacheProtocol? = nil,
