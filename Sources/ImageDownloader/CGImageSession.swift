@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  CGImageSession.swift
 //  
 //
 //  Created by Илья Шаповалов on 22.09.2023.

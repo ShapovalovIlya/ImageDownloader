@@ -75,7 +75,7 @@ private extension Processor {
         from cgImage: CGImage,
         in size: CGSize,
         bitsPerComponent: Int,
-        bytesPerRow: Int = 0
+        bytesPerRow: Int = 8
     ) throws -> CGContext {
         guard let context = CGContext(
             data: nil,
