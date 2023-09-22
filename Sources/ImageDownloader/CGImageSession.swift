@@ -25,6 +25,7 @@ struct CGImageSession {
         cache.image(forUrl: url)
             .throwingPublisher
             .catch(cachedCGImageTaskPublisher(for: url))
+            .tryMap(processor.applyProcessors)
             .eraseToAnyPublisher()
     }
     
