@@ -14,16 +14,12 @@ public extension NSImageView {
     
     func image(
         for url: URL,
+        options: [Processor] = .init(),
         cache: CGImageCacheProtocol? = nil,
         completion: @escaping (Completion) -> Void = { _ in }
     ) -> AnyCancellable {
-        let processor = ImageProcessor(
-            .resize(self.bounds.size),
-            .cornerRadius(24)
-        )
-        
         return CGImageSession(
-            processor: processor,
+            processor: ImageProcessor(options),
             cache: cache ?? CGImageCache.shared
         )
         .cgImageTaskPublisher(for: url, in: self.bounds.size)

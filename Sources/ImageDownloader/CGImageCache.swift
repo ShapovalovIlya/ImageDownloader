@@ -27,7 +27,7 @@ final class CGImageCache: CGImageCacheProtocol {
     //MARK: - init(_:)
     required internal init(
         logger: Logger? = nil,
-        countLimit: Int = 30
+        countLimit: Int = 50
     ) {
         self.logger = logger
         cache.countLimit = countLimit
@@ -35,23 +35,13 @@ final class CGImageCache: CGImageCacheProtocol {
     
     //MARK: - Public methods
     public func setImage(_ image: CGImage, forUrl url: URL) {
-        logger?.debug("\(#function)")
-        guard let nsurl = NSURL(string: url.absoluteString) else {
-            return
-        }
-        cache.setObject(image, forKey: nsurl)
+        logger?.debug(#function)
+        cache.setObject(image, forKey: url as NSURL)
     }
     
     public func image(forUrl url: URL) -> CGImage? {
-        guard
-            let nsurl = NSURL(string: url.absoluteString),
-            let image = cache.object(forKey: nsurl)
-        else {
-            logger?.debug("Unable to load image from cache")
-            return nil
-        }
-        logger?.debug("Load image from cache")
-        return image
+        logger?.debug(#function)
+        return cache.object(forKey: url as NSURL)
     }
     
     static func shared(logger: Logger? = nil) -> CGImageCache {

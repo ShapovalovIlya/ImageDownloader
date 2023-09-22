@@ -15,7 +15,7 @@ struct CGImageSession {
     
     init(
         processor: ImageProcessor,
-        cache: CGImageCacheProtocol = CGImageCache.shared
+        cache: CGImageCacheProtocol
     ) {
         self.processor = processor
         self.cache = cache
