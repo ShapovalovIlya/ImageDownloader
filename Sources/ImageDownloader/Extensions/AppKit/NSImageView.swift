@@ -14,15 +14,15 @@ public extension NSImageView {
     
     func imageCancellable(
         for url: URL,
-        options: [Processor] = .init(),
+        options: [Option] = .init(),
         cache: CGImageCacheProtocol? = nil,
         completion: @escaping (Completion) -> Void = { _ in }
     ) -> AnyCancellable {
         return CGImageSession(
-            processor: ImageProcessor(options),
+            processor: ProcessorConveyor(options),
             cache: cache ?? CGImageCache.shared
         )
-        .cgImageTaskPublisher(for: url, in: self.bounds.size)
+        .cgImageTaskPublisher(for: url)
         .map(NSImage.init(cgImage:))
         .receive(on: DispatchQueue.main)
         .sink(

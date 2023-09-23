@@ -1,5 +1,5 @@
 //
-//  ImageProcessor.swift
+//  ProcessorConveyor.swift
 //  
 //
 //  Created by Илья Шаповалов on 22.09.2023.
@@ -14,15 +14,11 @@ public enum ProcessorError: Error {
     case createContextFail
 }
 
-struct ImageProcessor {
-    private let processors: [Processor]
+struct ProcessorConveyor {
+    private let processors: [Option]
     
     //MARK: - init(_:)
-    init(_ processors: [Processor] = .init()) {
-        self.processors = processors
-    }
-    
-    init(_ processors: Processor...) {
+    init(_ processors: [Option] = .init()) {
         self.processors = processors
     }
     

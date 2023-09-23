@@ -10,41 +10,31 @@ import CoreGraphics
 import Combine
 
 struct CGImageSession {
-    private let processor: ImageProcessor
+    private let processor: ProcessorConveyor
     private let cache: CGImageCacheProtocol
     
     init(
-        processor: ImageProcessor,
+        processor: ProcessorConveyor,
         cache: CGImageCacheProtocol
     ) {
         self.processor = processor
         self.cache = cache
     }
     
-    func cgImageTaskPublisher(for url: URL, in size: CGSize) -> AnyPublisher<CGImage, Error> {
+    func cgImageTaskPublisher(for url: URL) -> AnyPublisher<CGImage, Error> {
         cache.image(forUrl: url)
             .throwingPublisher
-            .catch(cachedCGImageTaskPublisher(for: url))
+            .catch(cgImageTaskPublisher(for: url))
             .tryMap(processor.applyProcessors)
             .eraseToAnyPublisher()
     }
     
-    func cachedCGImageTaskPublisher(for url: URL) -> (Error) -> AnyPublisher<CGImage, Error> {
+    private func cgImageTaskPublisher(for url: URL) -> (Error) -> AnyPublisher<CGImage, Error> {
         { _ in
             URLSession.shared.dataTaskPublisher(for: url)
                 .map(\.data)
-                .tryMap(ImageProcessor.createCGImage(from:))
-                .map(cache(forUrl: url))
+                .tryMap(CGImage.create(from:))
                 .eraseToAnyPublisher()
-        }
-    }
-}
-
-private extension CGImageSession {
-    private func cache(forUrl url: URL) -> (CGImage) -> CGImage {
-        { cgImage in
-            cache.setImage(cgImage, forUrl: url)
-            return cgImage
         }
     }
 }
