@@ -29,6 +29,42 @@ extension CGImage {
         )
     }
     
+    func contextBody(_ completion: (CGContext) -> Void) throws -> CGImage {
+        guard 
+            let dataProvider = self.dataProvider,
+            let data = dataProvider.data
+        else {
+            throw ImageDownloaderError.cgImageDataFail
+        }
+        
+        let length = CFDataGetLength(data)
+        let bytes = UnsafeMutablePointer<UInt8>.allocate(capacity: length)
+        CFDataGetBytes(
+            data,
+            CFRange(location: 0, length: length),
+            bytes
+        )
+        
+        guard let context = CGContext(
+            data: bytes,
+            width: self.width,
+            height: self.height,
+            bitsPerComponent: self.bitsPerComponent,
+            bytesPerRow: self.bytesPerRow,
+            space: self.colorSpace ?? CGColorSpaceCreateDeviceRGB(),
+            bitmapInfo: self.bitmapInfo.rawValue
+        ) else {
+            throw ImageDownloaderError.createCGContextFail
+        }
+        
+        completion(context)
+        guard let image = context.makeImage() else {
+            throw ImageDownloaderError.createCGImageFail
+        }
+        bytes.deallocate()
+        return image
+    }
+    
     static func create(from imageData: Data) throws -> CGImage {
         guard
             let imageSource = CGImageSourceCreateWithData(imageData as CFData, nil),

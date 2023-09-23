@@ -18,12 +18,12 @@ struct RoundCornerProcessor {
     func process(_ cgImage:CGImage) throws -> CGImage {
         let rect = NSRect(origin: .zero, size: cgImage.size)
         guard let context = cgImage.context else {
-            throw ProcessorError.createContextFail
+            throw ImageDownloaderError.createCGContextFail
         }
         let path = makePath(in: rect, with: radius)
         draw(path, in: context)
         guard let cornered = context.makeImage() else {
-            throw ProcessorError.createImageFail
+            throw ImageDownloaderError.createCGImageFail
         }
         return cornered
     }

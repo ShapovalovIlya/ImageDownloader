@@ -9,11 +9,6 @@ import Foundation
 import CoreGraphics
 import AppKit
 
-public enum ProcessorError: Error {
-    case createImageFail
-    case createContextFail
-}
-
 struct ProcessorConveyor {
     private let processors: [Option]
     
@@ -34,7 +29,7 @@ struct ProcessorConveyor {
             let imageSource = CGImageSourceCreateWithData(imageData as CFData, nil),
             let image = CGImageSourceCreateImageAtIndex(imageSource, 0, nil)
         else {
-            throw ProcessorError.createImageFail
+            throw ImageDownloaderError.createCGImageFail
         }
         return image
     }
