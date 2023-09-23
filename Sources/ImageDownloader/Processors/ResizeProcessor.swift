@@ -15,21 +15,26 @@ struct ResizeProcessor {
     }
     
     func process(_ cgImage: CGImage) throws -> CGImage {
-//        try cgImage.contextBody { context in
-//            context.interpolationQuality = .high
-//            context.draw(
-//                cgImage,
-//                in: .init(origin: .zero, size: size)
-//            )
-//
-//        }
+        //        try cgImage.contextBody { context in
+        //            context.interpolationQuality = .high
+        //            context.draw(
+        //                cgImage,
+        //                in: .init(origin: .zero, size: size)
+        //            )
+        //
+        //        }
         guard let context = cgImage.context else {
             throw ImageDownloaderError.createCGContextFail
         }
-                    guard let scaled = context.makeImage() else {
-                        throw ImageDownloaderError.createCGImageFail
-                    }
-                    return scaled
+        context.interpolationQuality = .high
+        context.draw(
+            cgImage,
+            in: .init(origin: .zero, size: size)
+        )
+        guard let scaled = context.makeImage() else {
+            throw ImageDownloaderError.createCGImageFail
+        }
+        return scaled
         
     }
 }
