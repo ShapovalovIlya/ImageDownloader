@@ -21,7 +21,13 @@ struct RoundCornerProcessor {
             throw ImageDownloaderError.createCGContextFail
         }
         let path = makePath(in: rect, with: radius)
-        draw(path, in: context)
+   //     draw(path, in: context)
+        
+        context.beginPath()
+        context.addPath(path)
+        context.closePath()
+        context.clip()
+        
         guard let cornered = context.makeImage() else {
             throw ImageDownloaderError.createCGImageFail
         }
@@ -36,7 +42,7 @@ private extension RoundCornerProcessor {
         CGPath(roundedRect: rect, cornerWidth: radius, cornerHeight: radius, transform: nil)
     }
     
-    func draw(_ path: CGPath, in context:CGContext) {
+    func draw(_ path: CGPath, in context: inout CGContext) {
         context.beginPath()
         context.addPath(path)
         context.closePath()

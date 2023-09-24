@@ -23,15 +23,4 @@ struct ProcessorConveyor {
             image = try processor.process(image)
         }
     }
-    
-    static func createCGImage(from imageData: Data) throws -> CGImage {
-        guard
-            let imageSource = CGImageSourceCreateWithData(imageData as CFData, nil),
-            let image = CGImageSourceCreateImageAtIndex(imageSource, 0, nil)
-        else {
-            throw ImageDownloaderError.createCGImageFail
-        }
-        return image
-    }
-    
 }

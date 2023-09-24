@@ -10,6 +10,7 @@ import Foundation
 import Cocoa
 
 extension CGImage {
+    /// Compute CGSize for current image
     var size: CGSize {
         .init(
             width: self.width.cgFloat,
@@ -17,6 +18,7 @@ extension CGImage {
         )
     }
     
+    /// Compute CGContext for current image
     var context: CGContext? {
         .init(
             data: nil,
@@ -29,6 +31,11 @@ extension CGImage {
         )
     }
     
+    /// Compute new CGImage based on modified CGContext.
+    /// CGContext is provided with data pointer of current CGImage.
+    /// If creating dataProvider or data failed, method throws error.
+    /// - Parameter completion: CGContext for current image for applying changes. If creating context fails, method throws error.
+    /// - Returns: New CGImage based on configured CGContext. If create new image fails, method throws error.
     func contextBody(_ completion: (CGContext) -> Void) throws -> CGImage {
         guard 
             let dataProvider = self.dataProvider,
@@ -65,6 +72,7 @@ extension CGImage {
         return image
     }
     
+    /// Initialize CGImage from given raw data.
     static func create(from imageData: Data) throws -> CGImage {
         guard
             let imageSource = CGImageSourceCreateWithData(imageData as CFData, nil),
